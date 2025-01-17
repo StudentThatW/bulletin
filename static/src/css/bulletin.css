@@ -1,0 +1,8 @@
+/* отключение ссылок
+.breadcrumb > li {
+   display: none !important;
+ }
+ .breadcrumb > .active {
+   display: none !important;
+ }
+*/

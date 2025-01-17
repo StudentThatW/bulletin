@@ -1,0 +1,2079 @@
+<odoo>
+
+  <template id="assets_backend" name="tutorial_add_javascript assets" inherit_id="web.assets_backend">  
+      <xpath expr="." position="inside">   
+          <link type="text/css" href="/bulletin/static/src/css/bulletin.css" rel="stylesheet"/>
+
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js"></script>
+
+          <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+          <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+          <script src="script.js"></script>
+
+      </xpath>    
+  </template> 
+
+  <data>
+
+  <!-- модель Вид статистики bulletin.industries_economy -->
+    <record id="industries_economy_action_window" model="ir.actions.act_window">
+      <field name="name">Вид статистики</field>
+      <field name="res_model">bulletin.industries_economy</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.industries_economy_list">
+      <field name="name">bulletin_industries_economy_tree</field>
+      <field name="model">bulletin.industries_economy</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_industries_economy_tree">
+          <field name = "name" /> 
+          <field name = "industries_stat_type" />
+          <field name = "industries_parameter" />
+          <field name = "datalens" />
+          <field name = "period"/>
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.industries_economy_form" >
+
+      <field name = "name">bulletin_industries_economy_form</field>
+      <field name = "model">bulletin.industries_economy</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_industries_economy-form">
+          <sheet>
+            <group> 
+              <field name = "name" />
+              <field name = "industries_stat_type" /> 
+              <field name = "industries_parameter" />
+              <field name = "datalens" />
+              <field name = "period"/>
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.industries_economy -->
+
+  <!-- модель Справочник регионов -->
+    <record id="regions_action_window" model="ir.actions.act_window">
+      <field name="name">Справочник регионов</field>
+      <field name="res_model">bulletin.regions</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.regions_list">
+      <field name="name">bulletin_regions_tree</field>
+      <field name="model">bulletin.regions</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+
+        <tree string = "bulletin_regions_tree">
+           
+          <field name = "reg_number" class="text-left" /> 
+          <field name = "name" />
+          <field name = "archive" /> 
+          <field name = "fedstat" />
+          <field name = "eng_name" />
+          <field name = "federal" />
+          <field name = "region_type" /> 
+          <field name = "reg_name" />
+          <field name = "is_ind" />
+          <field name = "federal_number" />
+        </tree> 
+
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.regions_form" >
+
+      <field name = "name">bulletin_regions_form</field>
+      <field name = "model">bulletin.regions</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_regions-form">
+
+          <header>
+          </header>
+
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "reg_number" /> 
+              <field name = "name" />
+              <field name = "archive" /> 
+              <field name = "fedstat" />    
+              <field name = "eng_name" />          
+              <field name = "federal" />
+              <field name = "region_type" />
+              <field name = "reg_name" />
+              <field name = "is_ind" />
+              <field name = "federal_number" />
+            </group>
+          </sheet> 
+
+        </form>
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.regions_search" > 
+
+      <field name = "name" >bulletin_regions_search</field> 
+      <field name = "model" >bulletin.regions</field> 
+      <field name = "arch" type = "xml" > 
+
+        <search string = "Search bulletin_regions"  >           
+          <field name = "name" />
+          <field name = "federal" />
+          <field name = "region_type" />
+
+          <filter name = "federal" string = "Федеральный округ" context = "{'group_by':'federal'}" />
+          <filter name = "region_type" string = "Тип региона" context = "{'group_by':'region_type'}" />
+        </search>
+
+      </field> 
+    </record>
+
+  <!-- // модель bulletin.regions -->
+
+  <!-- модель bulletin.federal -->
+    <record id="federal_action_window" model="ir.actions.act_window">
+      <field name="name">Справочник Федеральные округа</field>
+      <field name="res_model">bulletin.federal</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.federal_list">
+      <field name="name">bulletin_federal_tree</field>
+      <field name="model">bulletin.federal</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+
+        <tree string = "bulletin_federal_tree">
+          <field name = "fed_number_str" /> 
+          <field name = "name" />
+          <field name = "fedstat" />
+        </tree> 
+
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.federal_form" >
+
+      <field name = "name">bulletin_federal_form</field>
+      <field name = "model">bulletin.federal</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_federal-form">
+
+          <header>
+          </header>
+
+          <sheet>
+            <group> 
+              <field name = "fed_number" /> 
+              <field name = "name" />
+              <field name = "fedstat" />              
+            </group>
+          </sheet> 
+
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.federal -->
+
+  <!-- модель Справочник сотрудники -->
+    <record id="workers_action_window" model="ir.actions.act_window">
+      <field name="name">Справочник сотрудники</field>
+      <field name="res_model">bulletin.workers</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.workers_list">
+      <field name="name">bulletin_workers_tree</field>
+      <field name="model">bulletin.workers</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_workers_tree">
+          <field name = "id" />
+          <field name = "name" /> 
+          <field name = "departament" />
+          <field name = "job" />
+          <field name = "user" />
+          <field name = "bulletin" />
+        </tree> 
+      </field>
+    </record> 
+
+  <!-- // модель workers  -->
+
+  <!-- модель Справочник должности -->
+    <record id="job_action_window" model="ir.actions.act_window">
+      <field name="name">Справочник должности</field>
+      <field name="res_model">bulletin.job</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+  <!-- // модель bulletin.job -->
+
+  <!-- модель bulletin.departament -->
+    <record id="departament_action_window" model="ir.actions.act_window">
+      <field name="name">Справочник подразделения</field>
+      <field name="res_model">bulletin.departament</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.departament_list">
+      <field name="name">bulletin_departament_tree</field>
+      <field name="model">bulletin.departament</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+
+        <tree string = "bulletin_departament_tree">
+          <field name = "name" /> 
+          <field name = "manager" />
+          <field name = "workers_count" />
+        </tree> 
+
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.departament_form" >
+
+      <field name = "name">bulletin_departament_form</field>
+      <field name = "model">bulletin.departament</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_departament-form">
+
+          <header>
+          </header>
+
+          <group> 
+            <field name = "name" /> 
+            <field name = "manager" />
+            <field name = "parent" />
+          </group> 
+
+          <group> 
+            <field name = "workers_ids"  > 
+              <tree>
+                <field name = "name" />
+              </tree>
+            </field> 
+          </group>
+
+          <footer>
+          </footer>
+
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.departament -->
+
+  <!-- модель Показатели отрасли bulletin.indicators_industries -->
+    <record id="indicators_industries_action_window" model="ir.actions.act_window">
+      <field name="name">Показатели отрасли</field>
+      <field name="res_model">bulletin.indicators_industries</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.indicators_industries">
+      <field name="name">bulletin_indicators_industries_tree</field>
+      <field name="model">bulletin.indicators_industries</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_indicators_industries_tree">
+          <field name = "name" />
+          <field name = "fedstat" />
+          <field name = "industries" />
+          <field name = "sheet_name" />
+          <field name = "rf" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.indicators_industries_form" >
+
+      <field name = "name">bulletin_indicators_industries_form</field>
+      <field name = "model">bulletin.indicators_industries</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_indicators_industries-form">
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "name" />
+              <field name = "fedstat" />
+              <field name = "upper_name" />
+              <field name = "industries" />
+              <field name = "sheet_name" />
+              <field name = "rf" />
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.indicators_industries -->
+
+  <!-- модель Характеристики отрасли bulletin.characteristics_industries -->
+    <record id="characteristics_industries_action_window" model="ir.actions.act_window">
+      <field name="name">Характеристики отрасли</field>
+      <field name="res_model">bulletin.characteristics_industries</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.characteristics_industries">
+      <field name="name">bulletin_characteristics_industries_tree</field>
+      <field name="model">bulletin.characteristics_industries</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_characteristics_industries_tree">
+          <field name = "name" /> 
+          <field name = "fedstat" />
+          <field name = "industries" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.characteristics_industries_form" >
+
+      <field name = "name">bulletin_characteristics_industries_form</field>
+      <field name = "model">bulletin.characteristics_industries</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_characteristics_industries-form">
+          <sheet>
+            <group> 
+              <field name = "name" />
+              <field name = "fedstat" />
+              <field name = "upper_name" />
+              <field name = "industries" />
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.characteristics_industries -->
+
+  <!-- модель bulletin.region_type Тип региона -->
+    <record id="region_type_action_window" model="ir.actions.act_window">
+      <field name="name">Тип региона</field>
+      <field name="res_model">bulletin.region_type</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.region_type_list">
+      <field name="name">bulletin_federal_tree</field>
+      <field name="model">bulletin.region_type</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string = "bulletin_region_type_tree">
+          <field name = "id" />
+          <field name = "name" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.region_type_form" >
+
+      <field name = "name">bulletin_region_type_form</field>
+      <field name = "model">bulletin.region_type</field>
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_region_type-form">
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "name" />        
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.region_type -->
+
+  <!-- модель bulletin.stat_type Тип статистики -->
+    <record id="stat_type_action_window" model="ir.actions.act_window">
+      <field name="name">Тип статистики</field>
+      <field name="res_model">bulletin.stat_type</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.stat_type_list">
+      <field name="name">bulletin_stat_type</field>
+      <field name="model">bulletin.stat_type</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string = "bulletin_stat_type_tree">
+          <field name = "id" />
+          <field name = "name" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.stat_type_form" >
+
+      <field name = "name">bulletin_stat_type_form</field>
+      <field name = "model">bulletin.stat_type</field>
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_stat_type-form">
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "name" />        
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.stat_type -->
+
+  <!-- модель bulletin.load_date Периоды -->
+    <record id="load_date_action_window" model="ir.actions.act_window">
+      <field name="name">Периоды</field>
+      <field name="res_model">bulletin.load_date</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.load_date_list">
+      <field name="name">bulletin_load_date</field>
+      <field name="model">bulletin.load_date</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string = "bulletin_load_date_tree">
+          <field name = "name" /> 
+          <field name = "load_date" />
+          <field name = "industries" />
+          <field name = "quarter" />
+          <field name = "comment" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.load_date_form" >
+
+      <field name = "name">bulletin_load_date_form</field>
+      <field name = "model">bulletin.load_date</field>
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_load_date-form">
+          <sheet>
+            <group> 
+              <field name = "name" />
+              <field name = "load_date" />
+              <field name = "industries" /> 
+              <field name = "quarter" />   
+              <field name = "comment" />    
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.load_date -->
+
+  <!-- модель bulletin.okved ОКВЭД2 -->
+    <record id="okved_action_window" model="ir.actions.act_window">
+      <field name="name">ОКВЭД2</field>
+      <field name="res_model">bulletin.okved</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.okved_list">
+      <field name="name">bulletin_okved</field>
+      <field name="model">bulletin.okved</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string = "bulletin_okved_tree"> 
+          <field name = "id" />
+          <field name = "code" />
+          <field name = "status" />
+          <field name = "name" /> 
+          <field name = "short_name" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.okved_form" >
+
+      <field name = "name">bulletin_okved_form</field>
+      <field name = "model">bulletin.okved</field>
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_okved-form">
+          <sheet>
+            <group> 
+              <field name = "code" />
+              <field name = "status" />
+              <field name = "name" />   
+              <field name = "short_name" />     
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.okved -->
+
+  <!-- модель bulletin.parameter_type Тип параметра -->
+    <record id="parameter_type_action_window" model="ir.actions.act_window">
+      <field name="name">Тип параметра</field>
+      <field name="res_model">bulletin.parameter_type</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.parameter_type_list">
+      <field name="name">bulletin_parameter_type</field>
+      <field name="model">bulletin.parameter_type</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string = "bulletin_parameter_type_tree">
+          <field name = "id" />
+          <field name = "name" />
+          <field name = "industries" /> 
+          <field name = "sheet_name" />
+          <field name = "rf" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.parameter_type_form" >
+
+      <field name = "name">bulletin_parameter_type_form</field>
+      <field name = "model">bulletin.parameter_type</field>
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_parameter_type-form">
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "name" /> 
+              <field name = "industries" />   
+              <field name = "sheet_name" />    
+              <field name = "rf" />              
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.parameter_type -->
+
+  <!-- модель bulletin.regions_name -->
+    <record id="regions_name_action_window" model="ir.actions.act_window">
+      <field name="name">Варианты наименования регионов</field>
+      <field name="res_model">bulletin.regions_name</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.regions_name_list">
+      <field name="name">bulletin_regions_name_tree</field>
+      <field name="model">bulletin.regions_name</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+
+        <tree string = "bulletin_regions_name_tree">
+          <field name = "region" />         
+          <field name = "name" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.regions_name_form" >
+
+      <field name = "name">bulletin_regions_name_form</field>
+      <field name = "model">bulletin.regions_name</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_regions_name-form">
+
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "region" /> 
+              <field name = "name" />
+            </group>
+          </sheet> 
+
+        </form>
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.regions_name_search" > 
+
+      <field name = "name" >bulletin_regions_name_search</field> 
+      <field name = "model" >bulletin.regions_name</field> 
+      <field name = "arch" type = "xml" > 
+
+        <search string = "Search bulletin_regions_name"  > 
+          <field name = "region" />
+          <field name = "name" />
+        </search>
+
+      </field> 
+    </record>
+
+  <!-- // модель bulletin.regions_name -->
+
+  <!-- модель Периодичность статистики bulletin.statistics_period -->
+    <record id="statistics_period_action_window" model="ir.actions.act_window">
+      <field name="name">Периодичность статистики</field>
+      <field name="res_model">bulletin.statistics_period</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <record model="ir.ui.view" id="bulletin.statistics_period_list">
+      <field name="name">bulletin_statistics_period_tree</field>
+      <field name="model">bulletin.statistics_period</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_statistics_period_tree">
+          
+          <field name = "id" />
+          <field name = "name" />
+
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.statistics_period_form" >
+
+      <field name = "name">bulletin_statistics_period_form</field>
+      <field name = "model">bulletin.statistics_period</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_statistics_period-form">
+          <sheet>
+            <group> 
+              <field name = "id" />
+              <field name = "name" />
+
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.statistics_period -->
+
+  <!-- модель bulletin.industries_parameter Параметры статистики -->
+    <record id="industries_parameter_action_window" model="ir.actions.act_window">
+      <field name="name">Параметры статистики</field>
+      <field name="res_model">bulletin.industries_parameter</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.industries_parameter_list">
+      <field name="name">bulletin_industries_parameter</field>
+      <field name="model">bulletin.industries_parameter</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string = "bulletin_industries_parameter_tree">
+          <field name = "id" /> 
+          <field name = "name" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.industries_parameter_form" >
+
+      <field name = "name">bulletin_industries_parameter_form</field>
+      <field name = "model">bulletin.industries_parameter</field>
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_industries_parameter-form">
+          <sheet>
+            <group> 
+              <field name = "id" /> 
+              <field name = "name" />         
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.industries_parameter -->
+
+  <!-- модель Статистика bulletin.statistics -->
+    <record id="statistics_action_window" model="ir.actions.act_window">
+      <field name="name">Статистика</field>
+      <field name="res_model">bulletin.statistics</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <record model="ir.ui.view" id="bulletin.statistics_list">
+      <field name="name">bulletin_statistics_tree</field>
+      <field name="model">bulletin.statistics</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_statistics_tree">
+          
+          <field name = "date_stat" />
+          <field name = "quarter" />
+          <field name = "period" />
+          <field name = "industries" />
+          <field name = "indicators_industries" />
+          <field name = "characteristics_industries" />
+          <field name = "region" /> 
+          <field name = "region_type" />
+          <field name = "count" />
+          <field name = "okved" />
+          <field name = "parameter_type" />  
+          <field name = "stat_type" />
+          <field name = "column" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.statistics_form" >
+
+      <field name = "name">bulletin_statistics_form</field>
+      <field name = "model">bulletin.statistics</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_statistics-form">
+          <sheet>
+            <group> 
+              <field name = "name" />
+              <field name = "quarter" />
+              <field name = "period" />
+              <field name = "region" />
+              <field name = "region_type" />
+              <field name = "date_stat" />
+              <field name = "count" />
+              <field name = "industries" />
+              <field name = "indicators_industries" />
+              <field name = "characteristics_industries" />
+              <field name = "okved" />
+              <field name = "parameter_type" />
+              <field name = "stat_type" />
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.statistics -->
+
+  <!-- модель bulletin.stat_wizard  -->
+
+    <act_window id = "stat_wizard_action_window"
+      name = "Загрузка"
+      res_model = "bulletin.stat_wizard"
+      view_mode = "form"
+      target = "new" 
+    /> 
+
+    <record id="stat_wizard_action_window" model="ir.actions.act_window">
+      <field name="name">Установить отбор</field>
+      <field name="res_model">bulletin.stat_wizard</field>
+      <field name="view_mode">form</field>
+    </record>  
+
+    <record id = "form_stat_wizard_action_window" model = "ir.ui.view" >
+      <field name = "name">не имеет значения</field>
+      <field name = "model">bulletin.stat_wizard</field>
+      <field name = "type">form</field>
+      <field name = "arch" type="xml">
+
+        <form string = "не имеет значения">
+
+            <header>              
+            </header>
+
+            <script>              
+            </script>
+
+            <notebook>
+              <page string = "Параметры отбора"  >
+
+                <group style = "text-align:left; width:100%">
+                  <field name = "industries" />
+                </group>
+
+                <group col = "6" style = "text-align:left; width:100% " >
+
+                  <field name = "date_start"  />  
+                  <field name = "date_finish" /> 
+                  <field name = "period" /> 
+
+                </group>
+
+                <group col = "4" style = "text-align:left; width:100%">
+                  <field name = "region_type" style = "width:70%" />
+                  <field name = "region" widget = "many2many_tags" style = "width:120%" /> 
+                </group>
+
+                <group style = "text-align:left; width:100%">
+
+                  <field name = "okved" attrs= "{ 'invisible': [ '|','|','|', ( 'message','=', 'Численность постоянного населения в среднем за год' ), 
+                                                                      ( 'message','=', 'Численность постоянного населения на 1 января' ),
+                                                                      ( 'message','=', 'Объем платных услуг населению' ),
+                                                                      ( 'message','=', 'Оборот розничной торговли' )                                                                        
+                                                                      ] }" />
+
+                  <field name = "parameter_type" attrs= "{ 'invisible': [ '|', ( 'message','=', 'Численность постоянного населения в среднем за год' ), 
+                                                                               ( 'message','=', 'Численность постоянного населения на 1 января' ) 
+                                                                                ] }"/> 
+
+                  <field name = "indicators_industries"  attrs= "{ 'invisible': [ '|', ( 'message','=', 'Индекс промпроизводства' ),
+                                                                                       ( 'message','=', 'Объем платных услуг населению' ) 
+                                                                                       ] }" /> 
+
+                  <field name = "loval_server" />
+                  <field name = "not_null_number" />
+                  <field name = "message" /> 
+
+                </group>
+
+                <group col = "4" style = "text-align:center; width:100% ">  
+                  <button string = "Сформировать" name = "select_to_base" type = "object" class = "oe_highlight" icon = "fa-check-square-o" />                  
+                  <button string = "Загрузить в DataLens" name = "select_to_datalens"  type = "object" class = "oe_highlight ml4" icon = "fa-download" />                  
+                  <button string = "Тест" name = "test_base" id = "delete_from_base" type = "object" class = "oe_highlight" icon = "fa-check-square-o" />                                    
+                  <button string = "Закрыть" special="cancel" class = "oe_highlight" icon = "fa-window-close-o" />
+                </group>
+            
+              </page>
+
+              <page string = "Сервис"  >
+
+                <group style = "text-align:left; width:100%"> 
+                  <field name = "industries" />
+                  <field name = "parameter_type" /> 
+                  <field name = "indicators_industries" /> 
+                  <field name = "oper_type" />                   
+                </group>
+
+                <group col = "4" style = "text-align:center; width:100% ">             
+                  <button string = "Выполнить" name = "service" type = "object" class = "oe_highlight" icon = "fa-check-square-o" />               
+                  <button string = "Закрыть" special="cancel" class = "oe_highlight" icon = "fa-window-close-o" />                 
+                </group>
+              </page>
+
+            </notebook>
+
+            <footer>         
+            </footer>
+
+        </form>
+      </field>
+    </record> 
+
+  <!-- \\ модель bulletin.stat_wizard  -->
+
+  <!-- модель Рейтинг bulletin.rating -->
+    <record id="rating_action_window" model="ir.actions.act_window">
+      <field name="name">Рейтинг</field>
+      <field name="res_model">bulletin.rating</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <record model="ir.ui.view" id="bulletin.rating_list">
+      <field name="name">bulletin_rating_tree</field>
+      <field name="model">bulletin.rating</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_rating_tree">          
+          <field name = "name" />
+          <field name = "datalens_table" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.rating_form" >
+
+      <field name = "name">bulletin_rating_form</field>
+      <field name = "model">bulletin.rating</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_rating_form">
+
+          <header>
+            <button string = "Сформировать рейтинг" name = "write_to_table" id = "write_to_table" type = "object" class = "oe_highlight ml4" icon = "fa-check-square-o" />
+            <button string = "Удалить рейтинг" name = "clear_rating" id = "clear_rating" type = "object" class = "oe_highlight ml4" icon = "fa-trash-o" confirm = "Удалить рейтинг ?" />
+            <button string = "Рейтинг в DataLens" name = "rating_to_result" id = "rating_to_result" type = "object" class = "oe_highlight ml4" icon = "fa-check-square-o" />
+            <button string = "Заполнить период" name = "rating_perid" id = "rating_to_result" type = "object" class = "oe_highlight ml4" icon = "fa-check-square-o" />
+          </header>
+          
+          <notebook>
+            <page string = "Рэйтинг" >
+
+            <group col = "6" > 
+              <field name = "name" />
+              <field name = "datalens_table" /> 
+              <field name = "loval_server" />
+
+            </group>
+
+            <group>
+              <field name = "table_ids" nolabel="1" >                 
+                <tree >
+
+                  <field name = "region" />
+                  <field name = "reg_number" />
+                  <field name = "reg_name" />
+                  <field name = "federal" />
+                  <field name = "industries" />
+                  <field name = "date" /> 
+                  <field name = "count" />
+                  <field name = "rang" />
+                  <field name = "delta" />
+                  <field name = "federal_number" />
+                  <field name = "number_industries" /> 
+                </tree>
+              </field> 
+            </group>
+            </page>
+
+            <page string = "Настройки" >
+            <group>
+              <field name = "rating_industries_ids" nolabel="1" context = "{ 'rating_ctx': id }" >                 
+                <tree >
+                  <field name = "rating" />
+                  <field name = "industries" />
+                  <field name = "parameter_type" />
+                  <field name = "indicators_industries" />
+
+                  <field name = "date_start" />
+                  <field name = "date_end" />
+
+                  <field name = "is_activ" />
+                  <field name = "number_industries" />
+                </tree>
+              </field> 
+            </group>
+
+            <field name = "id" nolabel = "1" style = "display: none; " />
+            </page>
+            </notebook>
+        </form>
+      </field>
+    </record> 
+    <!-- // форма   -->
+
+  <!-- // модель bulletin.rating -->
+
+  <!-- модель Рейтинг тч bulletin.rating_table -->
+    <record id="rating_table_action_window" model="ir.actions.act_window">
+      <field name="name">Рейтинг тч</field>
+      <field name="res_model">bulletin.rating_table</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <!-- список -->
+    <record model="ir.ui.view" id="bulletin.rating_table_list">
+      <field name="name">bulletin_rating_tree</field>
+      <field name="model">bulletin.rating_table</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_rating_table_tree">       
+          
+          <field name = "region" />  
+          <field name = "reg_number" />
+          <field name = "federal_number" />
+          <field name = "reg_name" />
+          <field name = "federal" />
+          <field name = "industries" />
+          <field name = "date" /> 
+          <field name = "count" />
+          <field name = "delta" />
+          <field name = "rang" /> 
+          <field name = "number_industries" /> 
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.rating_table_form" >
+
+      <field name = "name">bulletin_rating_table_form</field>
+      <field name = "model">bulletin.rating_table</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_rating_table_form">
+          <sheet>
+            <group> 
+              <field name = "region" />
+              <field name = "reg_number" />
+              <field name = "federal_number" />
+              <field name = "reg_name" />
+              <field name = "federal" />
+              <field name = "industries" />
+              <field name = "date" /> 
+              <field name = "count" />
+              <field name = "delta" />
+              <field name = "rang" />
+              <field name = "number_industries" /> 
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+    <!-- // форма -->
+
+  <!-- // модель bulletin.rating_table -->
+
+  <!-- модель bulletin.message_view  -->
+
+    <record id="message_view_action_window" model="ir.actions.act_window">
+      <field name="name">Сообщение</field>
+      <field name="res_model">bulletin.message_view</field>
+      <field name="view_mode">form</field>
+    </record>  
+
+    <record id = "form_message_view_action_window" model = "ir.ui.view" >
+      <field name = "name">не имеет значения</field>
+      <field name = "model">bulletin.message_view</field>
+      <field name = "type">form</field>
+      <field name = "arch" type="xml">
+
+        <form string = "не имеет значения">
+
+          <group > 
+            <field name = "message" nolabel = "1" readonly = '1' /> 
+          </group>
+
+            <footer>       
+            <button string = "Закрыть" special="cancel" class = "oe_highlight" icon = "fa-window-close-o" />  
+            </footer>
+
+        </form>
+      </field>
+    </record> 
+
+  <!-- \\ модель bulletin.message_view  -->
+
+  <!-- модель ИПП bulletin.ipp -->
+    <record id="ipp_action_window" model="ir.actions.act_window">
+      <field name="name">ИПП</field>
+      <field name="res_model">bulletin.ipp</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <!-- список -->
+    <record model="ir.ui.view" id="bulletin.ipp_list">
+      <field name="name">bulletin_ipp_tree</field>
+      <field name="model">bulletin.ipp</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_ipp_tree">          
+          <field name = "date_stat" />
+          <field name = "count" />
+          <field name = "parameter_type" />
+          <field name = "region" /> 
+          <field name = "region_type" />
+          <field name = "okved" />
+
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.ipp_form" >
+
+      <field name = "name">bulletin_ipp_form</field>
+      <field name = "model">bulletin.ipp</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_ipp_form">
+          <sheet>
+            <group> 
+              <field name = "date_stat" />
+              <field name = "count" />
+              <field name = "parameter_type" />
+              <field name = "region" /> 
+              <field name = "region_type" />
+              <field name = "okved" />
+
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.ipp -->
+
+  <!-- модель bulletin.bulletin -->
+
+    <record id="bulletin_action_window" model="ir.actions.act_window" >
+      <field name="name">Бюллетень</field>
+      <field name="res_model">bulletin.bulletin</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.list">
+      <field name="name">bulletin list</field>
+      <field name="model">bulletin.bulletin</field>
+
+      <field name="arch" type="xml">
+        <tree>
+          
+          <field name="industries"/>
+          <field name="date_start"/>
+          <field name="date_finish"/>
+          <field name="stat_type" class="text-center" /> 
+          <field name="period"/>
+          <field name="comment"/>
+          <field name="link" />
+
+        </tree>
+      </field>
+      <!-- // список -->
+    </record>
+
+    <!-- форма -->
+      <record model = "ir.ui.view" id = "bulletin.bulletin_form" >
+
+        <field name = "name">bulletin_bulletin_form</field>
+        <field name = "model">bulletin.bulletin</field>
+        <field name = "arch" type = "xml">
+
+          <form string = "bulletin_bulletin-form" >
+
+            <button string = "Заполнить период" name = "group_perid" id = "group_perid" type = "object" class = "oe_highlight ml4" icon = "fa-check-square-o" />
+
+            <group> 
+              <field name="id"/>
+              <field name="industries"/>
+              <field name="name"/>
+              <field name="date_start"/>
+              <field name="date_finish"/>
+              <field name="count_record"/> 
+              <field name="stat_type"/>
+              <field name="user"/>
+              <field name="comment"/>
+              <field name="link"/>
+              <field name="period"/>
+            </group>
+
+            <notebook>
+
+              <!-- модель bulletin.load_date -->
+              <page string = "Периоды статистики" > 
+
+                <field name = "industries_ids" >                     
+                    <tree class="table-style-many2one" >
+                      <field name = "industries" />
+                      <field name = "load_date" /> 
+                      <field name = "period" />
+                      <field name = "quarter" />
+                    </tree>
+                  </field> 
+              </page>
+              
+              <!-- модель bulletin.attachment -->
+              <page string = "Присоединенные файлы" >
+                <group> 
+                  <field name = "attachment_ids" > 
+                    <tree class="table-style-many2one" >
+                      <field name = "name" />
+                      <field name = "attachment" widget="binary" filename = "name" />
+                      <field name = "date_load" />
+                    </tree>
+                  </field> 
+                </group>
+              </page>
+
+            </notebook>
+
+            <group> 
+              <field name="multicomment"/>
+            </group>
+
+            <script > 
+            </script>
+
+          </form>
+        </field>
+      </record> 
+    <!-- // форма -->
+  
+    <!-- разрешенные к поиску поля -->
+      <record model = "ir.ui.view" id = "bulletin.bulletin_search" > 
+        <field name = "name" >bulletin_bulletin_search</field> 
+        <field name = "model" >bulletin.bulletin</field> 
+        <field name = "arch" type = "xml" > 
+          <search string = "Search_bulletin"  > 
+            <field name = "industries" />
+          </search>
+        </field> 
+      </record>
+    <!-- // разрешенные к поиску поля -->
+
+    <!-- kanban  -->
+      <record model = "ir.ui.view" id = "bulletin.bulletin_kanban" >
+        <field name = "name">bulletin_bulletin_kanban</field>
+        <field name = "model">bulletin.bulletin</field>
+
+        <field name = "arch" type = "xml">
+          <kanban >
+            <templates>
+              <t t-name="kanban-box"> 
+
+                <div class = "o_kanban_record" style = "pointer-events: none;">
+
+                  <button name = "open_record"  type = "object" style = "pointer-events:auto; position:absolute; width:96%; height:90%; background:none; border:none;" title = "open" />
+        
+                  <table border = "0" cellpadding = "7" width = "100%" > 
+                    <tr>
+                      <td>Раздел</td>
+                      <td><field name = "name" /></td>
+                    </tr>
+
+                     <tr>
+                      <td>Пользователь</td>
+                      <td><field name = "user" /></td>  
+                    </tr>
+
+                    <tr>
+                      <td>Комментарий</td>
+                      <td><field name = "comment" /></td>
+                    </tr>
+
+                  </table>
+                </div>               
+              </t> 
+            </templates>
+          </kanban>
+        </field>
+      </record>
+    <!-- // kanban  -->
+
+  <!-- // модель bulletin.bulletin -->
+
+  <!-- модель bulletin.attachment Присоединенные файлы -->
+    <record id="attachment_action_window" model="ir.actions.act_window">
+      <field name="name">Присоединенные файлы</field>
+      <field name="res_model">bulletin.attachment</field>
+      <field name="view_mode">kanban,form,tree</field>
+    </record>
+
+    <record model="ir.ui.view" id="bulletin.attachment_list">
+      <field name="name">bulletin_attachment</field>
+      <field name="model">bulletin.attachment</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_attachment_tree">
+
+          <field name = "name" />
+          <field name = "date_load" />
+          <field name = "attachment" />
+          
+        </tree> 
+
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.attachment_form" >
+
+      <field name = "name">bulletin_attachment_form</field>
+      <field name = "model">bulletin.attachment</field>
+
+      <field name = "arch" type = "xml">
+        <form string = "bulletin_attachment-form">
+
+          <group>
+            <field name = "id" />
+            <field name = "attachment"  widget="binary" filename = "name" />    
+            <field name = "name" />
+            <field name = "date_load" />
+          </group>
+
+        </form>
+      </field>
+
+    </record> 
+
+
+    <record model = "ir.ui.view" id = "bulletin.attachment_kanban" >
+      <field name = "name">bulletin_attachment_kanban</field>
+      <field name = "model">bulletin.attachment</field>
+
+      <field name = "arch" type = "xml">
+
+        <kanban >
+
+          <templates>
+            <t t-name="kanban-box"> 
+
+              <div t-attf-class="oe_kanban_global_click">
+                      
+                <field name = "attachment" widget = "image"   />
+            
+              </div>               
+            </t> 
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+  <!-- // модель bulletin.attachment -->
+
+  <!-- модель bulletin.load_wizard  -->
+
+    <act_window id = "load_wizard_action_window"
+      name = "Загрузка"
+      res_model = "bulletin.load_wizard"
+      view_mode = "form"
+      target = "new" 
+    /> 
+
+    <record id="load_wizard_action_window" model="ir.actions.act_window">
+      <field name="name">Загрузка</field>
+      <field name="res_model">bulletin.load_wizard</field>
+      <field name="view_mode">form</field>
+    </record>  
+
+    <record id = "form_units_wizard_action_window" model = "ir.ui.view" >
+      <field name = "name">не имеет значения</field>
+      <field name = "model">bulletin.load_wizard</field>
+      <field name = "type">form</field>
+      <field name = "arch" type="xml">
+
+        <form string = "не имеет значения">
+
+          <header>
+          </header>
+
+          <script>              
+          </script>
+
+          <group > 
+            <field name = "industries" />
+            <field name = "parameter_type"        attrs= "{ 'invisible': [ '|', ( 'message', '=', 'Показатели статистики' ), 
+                                                                                ( 'message', '=', 'Неопределено' ) ] }" />                                                                                           
+            <field name = "indicators_industries" attrs= "{ 'invisible': [ '|', ( 'message','=', 'Тип параметра' ),
+                                                                                ( 'message', '=', 'Неопределено' ) ] }" />          
+          </group>
+
+          <group col = "6" >
+            <field name = "packet" />
+            <field name = "period" />
+            <field name = "industries_stat_type" />            
+          </group>
+
+          <group col = "4" >
+            <field name = "text2" />
+            <field name = "text3" />  
+          </group>
+              
+          <group col = "4" > 
+            <field name = "letter" />
+            <field name = "text1" />
+          </group>              
+
+          <group col = "6" > 
+            <field name = "start_index" />
+            <field name = "end_index" />
+            <field name = "quarter" />
+          </group> 
+
+          <group col = "4" style = "text-align:center; width:90% "> 
+
+            <!-- fedstst -->
+            <button string = "Ежемесячная загрузка" name = "get_month_stat" id = "get_month_stat" type = "object" class = "oe_highlight" icon = "fa-check-square-o"  /> 
+
+            <button string = "Загрузить Fedstat" name = "get_load_stat" id = "get_load_stat" type = "object" class = "oe_highlight" icon = "fa-check-square-o" /> 
+
+            <button string = "Закрыть" special="cancel" class = "oe_highlight" icon = "fa-window-close-o" />
+
+            <!-- rosstat -->
+            <button string = "Загрузить Rosstat" name = "get_load_rosstat" id = "get_load_rosstat" type = "object" class = "oe_highlight" icon = "fa-check-square-o"  />              
+
+          </group>
+
+          <field name = "message" nolabel = "1" />
+
+          <footer>                
+          </footer>
+
+        </form>
+      </field>
+    </record> 
+
+  <!-- \\ модель bulletin.load_wizard  -->
+
+
+  <!-- модель Статистика отбор bulletin.statistics_select  -->
+    <record id="statistics_select_action_window" model="ir.actions.act_window">
+      <field name="name">Статистика отбор</field>
+      <field name="res_model">bulletin.statistics_select</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('res_users', '=', [uid])]</field>
+      <field name="limit">96</field>
+    </record> 
+
+    <!-- список -->
+    <record model="ir.ui.view" id="bulletin.statistics_select_list">
+      <field name="name">bulletin_statistics_select_tree</field>
+      <field name="model">bulletin.statistics_select</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_statistics_select_tree">
+          
+          <field name = "res_users" />
+          <field name = "date_stat" />
+          <field name = "quarter" />
+          <field name = "period" />
+          <field name = "industries" />
+          <field name = "region" /> 
+          <field name = "count" />
+          <field name = "okved" />
+          <field name = "parameter_type" />  
+          <field name = "indicators_industries" />
+          <field name = "characteristics_industries" />
+        </tree> 
+      </field>
+    </record> 
+
+    <record model = "ir.ui.view" id = "bulletin.statistics_select_form" >
+
+      <field name = "name">bulletin_statistics_select_form</field>
+      <field name = "model">bulletin.statistics_select</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_statistics_select-form">
+          <sheet>
+            <group> 
+              <field name = "res_users" />
+              <field name = "name" />
+              <field name = "region" />
+              <field name = "region_type" />
+              <field name = "date_stat" />
+              <field name = "count" />
+              <field name = "industries" />
+              <field name = "indicators_industries" />
+              <field name = "characteristics_industries" />
+              <field name = "okved" />
+              <field name = "parameter_type" />
+              <field name = "quarter" />
+              <field name = "period" />
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+
+  <!-- // модель bulletin.statistics_select -->
+
+
+  <!-- модель Диаграмма bulletin.table -->
+    <record id="table_action_window" model="ir.actions.act_window">
+      <field name="name">Табличная форма</field>
+      <field name="res_model">bulletin.table</field>
+      <field name="view_mode">tree,form,pivot</field>
+    </record> 
+
+    <!-- список attrs = "{'invisible':[('count','>',0)]}"  -->
+    <record model="ir.ui.view" id="bulletin.table_list">
+      <field name="name">bulletin_table_tree</field>
+      <field name="model">bulletin.table</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_table_tree">
+          <field name = "name" />
+ 
+          <field name = "Ox1"  /> 
+          <field name = "Ox2"  /> 
+          <field name = "Ox3" />
+          <field name = "Ox4" /> 
+
+          <field name = "Ox5" />
+          <field name = "Ox5" /> 
+          <field name = "Ox7" />
+          <field name = "Ox8" />          
+
+          <field name = "Ox9" />
+          <field name = "Ox10" /> 
+          <field name = "Ox11" />
+          <field name = "Ox12" /> 
+
+          <field name = "Ox13" />
+          <field name = "Ox14" /> 
+          <field name = "Ox15" />
+          <field name = "Ox16" />     
+        </tree> 
+      </field>
+    </record> 
+    <!-- // список -->
+
+    <!-- форма -->
+    <record model = "ir.ui.view" id = "bulletin.table_form" >
+
+      <field name = "name">bulletin_table_form</field>
+      <field name = "model">bulletin.table</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_table-form">
+
+
+          <table id = "exportable_table" border = "1" cellpadding = "5" >
+
+            <tbody>
+
+            </tbody>
+          </table>
+
+          <button onclick="ExportExcel('xlsx')">Export table to excel</button>
+
+          <script type="text/javascript">
+
+            function ExportExcel(type, fn, dl) {
+
+              var elt = document.getElementById('exportable_table');
+              var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+
+              //return dl ?
+              //    XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+              // XLSX.writeFile(wb, fn || ('SheetJSTableExport.' + (type || 'xlsx')));
+
+                XLSX.writeFile( wb, 'SheetJSTableExport.xlsx' );
+            }
+
+          </script>
+
+          <script>
+
+          var tableRef = document.getElementById( "exportable_table" );
+
+          var newRow = tableRef.insertRow(0);
+          var newCell = newRow.insertCell(0);
+
+          var newText = document.createTextNode('New top row 40');
+          newCell.appendChild(newText);
+
+          var newCell = newRow.insertCell(1);
+
+          var newText = document.createTextNode('New top row 41');
+          newCell.appendChild(newText);
+
+          var newCell = newRow.insertCell(2);
+
+          var newText = document.createTextNode('New top row 42');
+          newCell.appendChild(newText);
+
+
+          var newRow = tableRef.insertRow(1);
+          var newCell = newRow.insertCell(0);
+
+          var newText = document.createTextNode('New top row 50');
+          newCell.appendChild(newText);
+
+          var newCell = newRow.insertCell(1);
+
+          var newText = document.createTextNode('New top row 51');
+          newCell.appendChild(newText);
+
+          var newCell = newRow.insertCell(2);
+
+          var newText = document.createTextNode('New top row 52');
+          newCell.appendChild(newText);
+
+          /*
+          (async() => { 
+
+            const url = "https://sheetjs.com/data/executive.json";
+            const raw_data = await (await fetch(url)).json();
+
+            const prez = raw_data;
+
+            const rows = prez.map(row => ({
+              name: row.name.first + " " + row.name.last,
+              birthday: row.bio.birthday
+            }));  
+
+
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Статистика");
+
+            XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+
+            const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+            worksheet["!cols"] = [ { wch: max_width } ];
+
+            // XLSX.writeFile(workbook, "Presidents.xlsx", { compression: true });
+
+          })();
+          */
+
+
+          </script>
+        
+
+
+        </form>
+      </field>
+    </record> 
+    <!-- // форма -->
+
+  <!-- // модель bulletin.table -->
+
+  <!-- модель Диаграмма bulletin.diagram -->
+
+    <record id="diagram_action_window" model="ir.actions.act_window">
+      <field name="name">Диаграмма</field>
+      <field name="res_model">bulletin.diagram</field>
+      <field name="view_mode">tree,form,graph</field>
+    </record> 
+
+    <!-- <record id = "bulletin.diagram_graph" model = "ir.ui.view">
+          <field name = "name">bulletin_diagram</field>
+          <field name = "model">bulletin.diagram</field>
+          <field name = "arch" type="xml">
+              <graph string = "bulletin_diagram_string" type = "line">
+                  <field name = "date_stat" type = "col"/>
+                  <field name = "count" type = "measure"/>
+                  <field name = "count2" type = "measure"/>
+              </graph>
+          </field>
+    </record> -->
+
+    <!-- список -->
+    <record model="ir.ui.view" id="bulletin.diagram_list">
+      <field name="name">bulletin_diagram_tree</field>
+      <field name="model">bulletin.diagram</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_diagram_tree">
+
+          <field name = "date" />
+          <field name = "tutorial" />
+
+          <!-- <button type = "object" name = "get_list" string = "Открыть выборку" icon="fa-edit" /> -->
+
+        </tree> 
+      </field>
+    </record> 
+    <!-- // список -->
+
+    <!-- форма -->
+    <record model = "ir.ui.view" id = "bulletin.diagram_form" >
+
+      <field name = "name">bulletin_diagram_form</field>
+      <field name = "model">bulletin.diagram</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_diagram-form" >
+
+          <script > <!-- script рисования диаграммы -->
+
+            document.getElementById( 'getChart' ).onclick = function() 
+            {
+
+              // alert( Oy_one_list[0] );
+
+              // таблица
+              var tableRef = document.getElementById( "exportable_table" );
+
+              // -- таблица
+
+              // тип диаграммы из поля с перечислением diagram_type
+              var diagram_type = document.getElementsByName( 'diagram_type' )[0].value;
+
+              // общий заголовок из поля tutorial
+              var data_string = document.getElementsByName( 'tutorial' )[0].innerHTML;	
+
+              // координату Ox в список из строки
+              var Ox = document.getElementsByName( 'Ox' )[0].innerHTML;
+              var Ox_split = Ox.split(';', 300);
+
+              // координаты Oy сначала в строки - элементы списка Oy_one_list из общей строки, разделитель - ~
+              var Oy = document.getElementsByName( 'Oy' )[0].innerHTML;
+              var Oy_one_list = Oy.split('~', 300);
+
+              // заголовки чартов из поля Ot
+              var Ot = document.getElementsByName( 'Ot' )[0].innerHTML;
+              var Ot_split = Ot.split(';', 300);
+
+              // если Chart уже рисовали - удалить предыдущий
+              let chartStatus = Chart.getChart( "acquisitions" );
+              if (chartStatus != undefined) { chartStatus.destroy(); }
+              
+              // массивы для цветов ( 7 шт. )
+                backgroundColor_array = [];
+                borderColor_array = [];
+
+                backgroundColor_array.push( 'rgba(216, 27, 96, 0.6)' );  // розовый
+                borderColor_array.push( 'rgba(216, 27, 96, 1)' );        // красный
+
+                backgroundColor_array.push( 'rgba(255, 152, 0, 0.6)' );  // желтый
+                borderColor_array.push( 'rgba(255, 152, 0, 1)' );        
+
+                backgroundColor_array.push( 'rgba(3, 169, 244, 0.6)' );  // синий
+                borderColor_array.push( 'rgba(3, 169, 244, 1)' );        
+
+                backgroundColor_array.push( 'rgba(29, 233, 182, 0.6)' ); // зеленый
+                borderColor_array.push( 'rgba(29, 233, 182, 1)' );         
+
+                backgroundColor_array.push( 'rgba(156, 39, 176, 0.6)' ); // сиреневый / фиолетовый
+                borderColor_array.push( 'rgba(156, 39, 176, 1)' );         
+
+                backgroundColor_array.push( 'rgba(84, 110, 122, 0.6)' ); // болотный
+                borderColor_array.push( 'rgba(84, 110, 122, 1)' );         
+
+                backgroundColor_array.push( 'blac' ); // черный
+                borderColor_array.push( 'blac' );    
+
+              // -- массивы для цветов
+ 
+              // пустой массив для подстановки в datasets
+              datasets_array = [];
+
+              // таблица - Ox_split
+
+              // первая запись
+              var newRow = tableRef.insertRow(0);
+              var newCell = newRow.insertCell(0);
+              var newText = document.createTextNode( "Регион / Период" );
+              newCell.appendChild(newText);
+
+              // цикл перебора Ox_split
+              t = 0;
+              Ox_split.forEach( function(item, j, Ox_split) {
+                var newCell = newRow.insertCell(t+1);
+                var newText = document.createTextNode( Ox_split[t] );
+                newCell.appendChild(newText);
+                t = t + 1;
+              });
+              // -- цикл перебора Ox_split 
+              // -- таблица - Ox_split 
+
+              // цикл - перебор списка Oy_one_list с заполнением массива datasets_array
+              Oy_one_list.forEach( function(item, i, Oy_one_list) {
+
+                // текущий элемент массива Oy_one_list из строки в список, разделитель - ;
+                var Oy_split = Oy_one_list[i];
+                Oy1_split = Oy_split.split(';', 300);
+
+                datasets_item = {
+                          label: Ot_split[i],
+                          data: Oy1_split,
+                          backgroundColor: backgroundColor_array[i],
+                          borderColor: borderColor_array[i],
+                          borderWidth: 2,
+                          cubicInterpolationMode: 'monotone',       // плавная линия
+                          borderDash: [8, 4]                        // пунктир
+                        },
+                // добавить элемент datasets_item в конец массива datasets_array
+                datasets_array.push( datasets_item );
+
+                // таблица - регионы по вертикали из Ot_split / периоды 
+
+                var newRow = tableRef.insertRow(i+1);
+                var newCell = newRow.insertCell(0);
+                var newText = document.createTextNode( Ot_split[i] );
+                newCell.appendChild(newText);
+
+                // цикл перебора Oy1_split - count текущего региона по горизонтали
+                j = 0;
+                Oy1_split.forEach( function(item, j, Oy1_split) {
+                  var newCell = newRow.insertCell(j+1);
+                  var newText = document.createTextNode( Oy1_split[j] );
+                  newCell.appendChild(newText);
+                  j = j + 1;
+                });
+                // -- цикл перебора Oy1_split 
+                // -- таблица регионы / периоды 
+
+              });
+
+              // создать новый чарт
+
+              new Chart( document.getElementById( 'acquisitions' ),
+                {
+                  plugins: [ChartDataLabels],
+                  type: diagram_type,
+                  data: {
+                    // ось Ox
+                    labels: Ox_split,
+                    // массив значений чартов по оси Oy
+                    datasets: datasets_array
+                  // -- data
+                  },
+
+                  options: {
+
+                    responsive: true,
+                    stacked: false,
+
+                    plugins: {
+
+                      title: {
+                          display: true,
+                          text: data_string,
+                          padding: 0
+                        },
+
+                      datalabels: {
+                        color: 'black',
+                        borderRadius: 4,
+                        align: 'bottom',
+                        offset: 5,
+                        // font: { weight: 'bold' },
+                        // anchor: 'start',
+                        // clip: true,
+                      },
+                      // -- datalabels
+                    },
+                    // -- plugins
+
+                    // min max по шкале Y
+                    scales: {
+                      //y: {
+                      //  min: 800,
+                      // max: 120,
+                      //}
+
+                    // показывать ось Y еще и справа
+                    //  y: {
+                    //    type: 'linear',
+                    //    display: true,
+                    //    position: 'left',
+                    //  },
+                    //  y1: {
+                    //    type: 'linear',
+                    //    display: true,
+                    //    position: 'right',
+                    //    grid: {
+                    //      drawOnChartArea: false, // only want the grid lines for one axis to show up
+                    //    },
+                    //  },
+                    // -- scales  
+                    }
+                  // -- options
+                  },
+                // -- data  
+                }
+              );
+            }
+
+            
+          </script>
+
+          <div> <!-- таблица верхние поля выбора -->
+            <table border = "0" cellpadding = "10" >
+              <tr>
+                <td>
+                  <field name = "user" nolabel = "1" style = "display: none;" />
+                  Данные сформированы на :
+                  <field name = "date" />
+                  <field name = "id" />
+                </td>
+                <td>
+                  <select name = "diagram_type" >
+                    <option value = "line"     >Линейный график</option>
+                    <option value = "bar"      >Вертикальная гистограмма</option>
+                    <option value = "doughnut" >Кольцевая диаграмма</option>
+                    <option value = "pie"      >Круговая диаграмма</option> 
+                    <option value = "radar"    >Радарная диаграмма</option>
+                    <option value = "polarArea">Полярная диаграмма</option>
+                    <option value = "bubble"   >Пузырьковая диаграмма</option>
+                  </select>
+                </td>
+                <td>
+                  <button name = "getChart" id = "getChart">Вывести результат</button>
+                </td>
+                <td>
+                  <button onclick="ExportExcel('xlsx')">Экспортировать таблицу в Excel</button>
+                </td>
+                <td>
+                  <button name = "write_rezalt" id = "write_rezalt" string = "Сформировать выборку" class = "oe_highlight" type = "object" context = "{'state_record_id': id}" />
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <group> 
+          </group> 
+
+          <div class = "container"> <!-- canvas для рисования диаграммы -->
+              <!-- div style 500 - 1000 нормальная видимость диаграммы -->
+              <!-- <canvas id = "acquisitions" style = "border:1px solid #d3d3d3;">   бордюр canvas -->
+              <div style = "width: 1000px;"> <canvas id = "acquisitions" > </canvas> </div>
+          </div>
+
+            <!-- ссылки на библиотеку Chart.js
+
+              рабочие ссылки ( 4.X не работает )
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.2/chart.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script> 
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+              установка из файлов 
+              https://prognote.ru/web-dev/front-end/charting-on-javascript-using-chart-js/
+
+              плагины
+              https://cdnjs.com/libraries/chartjs-plugin-datalabels?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=sc
+
+              0;10;20;30;40;50;60;70;80;90;100;110
+              0;10;20;30;40;50;60;70;80;90;100;110
+
+              Step-by-step guide
+              https://www.chartjs.org/docs/latest/getting-started/usage.html
+
+              Multi Axis Line Chart
+              https://www.chartjs.org/docs/latest/samples/line/multi-axis.html
+
+              описание
+              https://prognote.ru/web-dev/front-end/charting-on-javascript-using-chart-js/
+
+              // https://it-blog.ru/other/kak-sozdat-diagrammu-na-javascript-s-chart-js/
+              // https://www.chartjs.org/
+              // https://www-chartjs-org.translate.goog/docs/latest/getting-started/usage.html?_x_tr_sl=en&_x_tr_tl=ru&_x_tr_hl=ru&_x_tr_pto=sc
+            -->
+
+            <group> 
+              <!-- невидимые поля с данными -->
+
+              <field name = "tutorial" nolabel = "1" style = "display: none;" />              
+              <field name = "Ox" nolabel = "1" style = "display: none;" />
+              <field name = "Ot" nolabel = "1" style = "display: none;" />
+              <field name = "Oy" nolabel = "1" style = "display: none;" />  
+            
+              <!-- видимые поля с данными 
+              <field name = "tutorial" />              
+              <field name = "Ox" />
+              <field name = "Ot" />
+              <field name = "Oy" />  -->
+
+            </group>
+
+            <group> 
+            </group> 
+
+            <!-- таблица-->
+            <div>
+              <table id = "exportable_table" border = "1" bordercolor = "#E0E4E8" cellpadding = "5" align="center"  >
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- таблицу в Excel --> 
+            <script type="text/javascript">
+              function ExportExcel(type, fn, dl) {
+                var elt = document.getElementById('exportable_table');
+                var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+                XLSX.writeFile( wb, 'SheetJSTableExport.xlsx' );
+              }
+            </script> 
+
+        </form>
+      </field>
+    </record> 
+    <!-- // форма -->
+
+  <!-- // модель bulletin.diagram -->
+
+  <!-- модель Статистика bulletin.statistics_download -->
+    <record id="statistics_download_action_window" model="ir.actions.act_window">
+      <field name="name">Выгрузка статистики</field>
+      <field name="res_model">bulletin.statistics_download</field>
+      <field name="view_mode">tree,form</field>
+    </record> 
+
+    <!-- список -->
+    <record model="ir.ui.view" id="bulletin.statistics_download_list">
+      <field name="name">bulletin_statistics_download_tree</field>
+      <field name="model">bulletin.statistics_download</field>
+      <field name="type">tree</field>
+
+      <field name="arch" type="xml">
+        <tree string = "bulletin_statistics_download_tree">
+          <!-- <field name = "name" /> -->
+          
+          <field name = "date_stat" />
+          <field name = "fedstat_region" />
+          <field name = "okved" />
+          <field name = "count" />                    
+          <field name = "industries" />
+          <field name = "parameter_type" /> 
+
+        </tree> 
+      </field>
+    </record> 
+    <!-- // список -->
+
+    <!-- форма -->
+    <record model = "ir.ui.view" id = "bulletin.statistics_download_form" >
+
+      <field name = "name">bulletin_statistics_download_form</field>
+      <field name = "model">bulletin.statistics_download</field>
+      <field name = "arch" type = "xml">
+
+        <form string = "bulletin_statistics_download-form">
+          <sheet>
+            <group> 
+              
+              <field name = "region" />
+              <field name = "date_stat" />
+
+            </group>
+          </sheet> 
+        </form>
+      </field>
+    </record> 
+    <!-- // форма -->
+
+  <!-- // модель bulletin.statistics_download -->
+
+    <menuitem name="Бюллетень" id="bulletin.menu_root" action =  "bulletin_action_window" />
+
+    <menuitem name="Справочники"      id="bulletin.menu_1" parent="bulletin.menu_root"/>
+    <menuitem name="Статистика"       id="bulletin.menu_2" parent="bulletin.menu_root"/>
+    <menuitem name="Загрузка данных"  id="bulletin.menu_3" parent="bulletin.menu_root"/>
+
+    <menuitem name = "Справочник вид статистики" id = "bulletin.menu_16_list" parent = "bulletin.menu_1" action = "industries_economy_action_window" sequence = "1"/>
+    <menuitem name = "Справочник регионы"        id = "bulletin.menu_11_list" parent = "bulletin.menu_1" action = "regions_action_window"/>
+    <menuitem name = "Справочник округа"         id = "bulletin.menu_12_list" parent = "bulletin.menu_1" action = "federal_action_window"/> 
+    <menuitem name = "Справочник подразделения"  id = "bulletin.menu_13_list" parent = "bulletin.menu_1" action = "departament_action_window"/>
+    <menuitem name = "Справочник сотрудники"     id = "bulletin.menu_14_list" parent = "bulletin.menu_1" action = "workers_action_window"/> 
+    <menuitem name = "Справочник должности"      id = "bulletin.menu_15_list" parent = "bulletin.menu_1" action = "job_action_window"/> 
+
+    <menuitem name = "Показатели отраслей"       id = "bulletin.menu_17_list" parent = "bulletin.menu_1" action = "indicators_industries_action_window"/> 
+    <menuitem name = "Характеристики отраслей"   id = "bulletin.menu_18_list" parent = "bulletin.menu_1" action = "characteristics_industries_action_window"/>
+    <menuitem name = "Справочник тип региона"    id = "bulletin.menu_19_list" parent = "bulletin.menu_1" action = "region_type_action_window"/> 
+    <menuitem name = "Справочник источники данных" id = "bulletin.menu_191_list" parent = "bulletin.menu_1" action = "stat_type_action_window"/> 
+    <menuitem name = "Справочник периоды"        id = "bulletin.menu_192_list" parent = "bulletin.menu_1" action = "load_date_action_window"/>
+    <menuitem name = "Справочник ОКВЭД 2"        id = "bulletin.menu_193_list" parent = "bulletin.menu_1" action = "okved_action_window"/> 
+    <menuitem name = "Справочник тип параметра"  id = "bulletin.menu_194_list" parent = "bulletin.menu_1" action = "parameter_type_action_window"/>
+    <menuitem name = "Варианты наименования регионов"  id = "bulletin.menu_195_list" parent = "bulletin.menu_1" action = "regions_name_action_window"/>
+    <menuitem name = "Периодичность статистики"  id = "bulletin.menu_196_list" parent = "bulletin.menu_1" action = "statistics_period_action_window"/>
+    <menuitem name = "Справочник Параметры статистики"  id = "bulletin.menu_197_list" parent = "bulletin.menu_1" action = "industries_parameter_action_window"/>
+    <menuitem name = "Статистика" id = "bulletin.menu_21_list" parent = "bulletin.menu_2" action = "statistics_action_window" sequence = "1"/> 
+    <menuitem name = "Диаграмма"  id = "bulletin.menu_22_list" parent = "bulletin.menu_2" action = "diagram_action_window"/>
+    <menuitem name = "Установить отбор" id = "bulletin.menu_24_list" parent = "bulletin.menu_2" action = "stat_wizard_action_window" sequence = "3"/> 
+    <menuitem name = "Присоединенные файлы" id = "bulletin.menu_25_list" parent = "bulletin.menu_2" action = "attachment_action_window"/>
+    <menuitem name = "Статистика выгрузка" id = "bulletin.menu_26_list" parent = "bulletin.menu_2" action = "statistics_download_action_window"/>
+    <menuitem name = "Статистика отбор"    id = "bulletin.menu_27_list" parent = "bulletin.menu_2" action = "statistics_select_action_window" sequence = "2"/>
+    <menuitem name = "ИПП" id = "bulletin.menu_28_list" parent = "bulletin.menu_2" action = "ipp_action_window" sequence = "6"/>
+    <menuitem name = "Рейтинг" id = "bulletin.menu_29_list" parent = "bulletin.menu_2" action = "rating_action_window"/>
+    <menuitem name = "Загрузка данных"   id = "bulletin.menu_31_list" parent = "bulletin.menu_3" action = "load_wizard_action_window"/> 
+
+  </data>
+</odoo>
